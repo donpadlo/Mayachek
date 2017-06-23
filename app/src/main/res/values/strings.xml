@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Маячёк</string>
+    <string name="you_id">Ваш ID</string>
+    <string name="you_id_real">none</string>
+    <string name="get_new_id">Получить новый ID</string>
+    <string name="view_in_map">Посмотреть на карте</string>
 </resources>
