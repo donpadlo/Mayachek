@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mayachek</string>
+    <string name="coorGPS">0;0</string>
+    <string name="coornet">0;0</string>
+    <string name="get_new_id">Get new Id</string>
+    <string name="tcoorGPS">By GPS</string>
+    <string name="tcoornet">By Network</string>
+    <string name="view_in_map">View on MAP</string>
+    <string name="you_id">You ID</string>
+    <string name="you_id_real">none</string>
+</resources>

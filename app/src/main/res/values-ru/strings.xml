@@ -1,12 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Маячёк</string>
+    <string name="you_id_real">Пока нет</string>
     <string name="you_id">Ваш ID</string>
-    <string name="you_id_real">none</string>
-    <string name="get_new_id">Получить новый ID</string>
     <string name="view_in_map">Посмотреть на карте</string>
     <string name="tcoornet">По данным сети:</string>
-    <string name="coornet">0;0</string>
     <string name="tcoorGPS">По данным GPS:</string>
+    <string name="get_new_id">Получить новый ID</string>
+    <string name="coornet">0;0</string>
     <string name="coorGPS">0;0</string>
-
 </resources>
