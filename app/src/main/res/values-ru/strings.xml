@@ -9,4 +9,5 @@
     <string name="get_new_id">Получить новый ID</string>
     <string name="coornet">0;0</string>
     <string name="coorGPS">0;0</string>
+    <string name="ConnectToServer">Запустить сервис</string>
 </resources>

@@ -8,5 +8,6 @@
     <string name="coornet">0;0</string>
     <string name="tcoorGPS">По данным GPS:</string>
     <string name="coorGPS">0;0</string>
+    <string name="ConnectToServer">Запустить сервис</string>
 
 </resources>
