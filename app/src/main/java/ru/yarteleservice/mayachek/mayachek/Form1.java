@@ -75,7 +75,7 @@ public class Form1 extends AppCompatActivity {
             HttpURLConnection urlConnection = null;
             Log.i("Info", "Запустил http соединение для получения нового ID");
             try {
-                URL url = new URL("http://noc.yarteleservice.ru/getjsonmess.php?command=getnotreadmessages&username="+arg[0]+"&pass="+arg[1]+"&GLongitude="+arg[2]+"&GLatitude="+arg[3]+"&NLongitude="+arg[4]+"&NLatitude="+arg[5]);
+                URL url = new URL("http://маячек.грибовы.рф?route=getnewid");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -95,7 +95,7 @@ public class Form1 extends AppCompatActivity {
             catch (Exception e) {
                 e.printStackTrace();
                 Log.i("Info", "Соедениться не удалось..");
-                res="-ERROR: Ошибка соединения!";
+                res="-ERROR: "+getString(R.string.error_connections);
             }
             return res;
         };

@@ -10,4 +10,5 @@
     <string name="you_id">You ID</string>
     <string name="you_id_real">none</string>
     <string name="ConnectToServer">Start Service</string>
+    <string name="error_connections">error connections</string>
 </resources>

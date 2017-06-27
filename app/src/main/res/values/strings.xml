@@ -9,5 +9,6 @@
     <string name="tcoorGPS">По данным GPS:</string>
     <string name="coorGPS">0;0</string>
     <string name="ConnectToServer">Запустить сервис</string>
+    <string name="error_connections">Ошибка соединения</string>
 
 </resources>
