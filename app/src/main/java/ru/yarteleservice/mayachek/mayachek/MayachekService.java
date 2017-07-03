@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +35,10 @@ import java.net.URL;
 
 public class MayachekService extends Service {
     String userid;
-
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
     public MayachekService() {
     }
     @Override
@@ -74,22 +78,30 @@ public class MayachekService extends Service {
     }
     //подписка на обновление местоположения
     public LocationListener locationListener = new LocationListener() {
-        public void UpdateMeLocation(Location location){
-
-            SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            userid=mSettings.getString("userid", "");
-            if (userid!=""){
-                if ((location.getProvider().equals(LocationManager.GPS_PROVIDER)) == true) {
-                    Log.i("Info", "-service: изменилось местоположение по GPS");
-                    new UpdateCoors().execute(String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),"GPS");
-                }
-                ;
-                if ((location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) == true) {
-                    Log.i("Info", "-service: изменилось местоположение по Network");
-                    new UpdateCoors().execute(String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),"Network");
-                }
-                ;
-            };
+        public void UpdateMeLocation(Location location) {
+            if (isOnline() == true){
+                    SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    userid = mSettings.getString("userid", "");
+                    if (userid != "") {
+                        if ((location.getProvider().equals(LocationManager.GPS_PROVIDER)) == true) {
+                            Log.i("Info", "-service: изменилось местоположение по GPS");
+                            new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "GPS");
+                        };
+                        if (Build.VERSION.SDK_INT > 16) {
+                            if ((location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) == true) {
+                                Log.i("Info", "-service: изменилось местоположение по Network");
+                                new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "Network");
+                            };
+                        };
+                    };
+        };
+        //поспим немножко для экономии энергии
+            try {
+                Log.i("Info", "-service: пошел поспать 15 секундочек");
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+            }
+        //
         }
         @Override
         public void onLocationChanged(Location location) {
