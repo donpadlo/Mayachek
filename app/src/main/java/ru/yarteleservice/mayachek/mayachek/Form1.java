@@ -243,6 +243,7 @@ public class Form1 extends AppCompatActivity {
                 TextView vuserid = (TextView) findViewById(R.id.textView);
                 vuserid.setText(userid);
             } else {
+                // иначе показываю тоаст ошибку
                 Log.i("Info", "Показываю уведомление об ошибке");
                 Toast toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
                 toast.show();
