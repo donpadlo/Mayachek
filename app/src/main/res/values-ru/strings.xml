@@ -3,7 +3,7 @@
     <string name="app_name">Маячёк</string>
     <string name="you_id_real">Пока нет</string>
     <string name="you_id">Ваш ID</string>
-    <string name="view_in_map">Посмотреть на карте</string>
+    <string name="view_in_map">Текущее положение</string>
     <string name="tcoornet">По данным сети:</string>
     <string name="tcoorGPS">По данным GPS:</string>
     <string name="get_new_id">Получить новый ID</string>
@@ -11,6 +11,6 @@
     <string name="coorGPS">0;0</string>
     <string name="ConnectToServer">Перезапустить сервис</string>
     <string name="error_connections">Ошибка соединения</string>
-    <string name="view_on_browser">Открыть в браузере</string>
-    <string name="tomayachek_site">Сайт маячка</string>
+    <string name="view_on_browser">Открыть трек в браузере</string>
+    <string name="tomayachek_site">Перейти на сайт</string>
 </resources>

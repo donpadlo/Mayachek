@@ -6,11 +6,11 @@
     <string name="get_new_id">Get new Id</string>
     <string name="tcoorGPS">By GPS</string>
     <string name="tcoornet">By Network</string>
-    <string name="view_in_map">View on MAP</string>
+    <string name="view_in_map">Current on MAP</string>
     <string name="you_id">You ID</string>
     <string name="you_id_real">none</string>
     <string name="ConnectToServer">ReStart Service</string>
     <string name="error_connections">error connections</string>
-    <string name="view_on_browser">View in browser</string>
+    <string name="view_on_browser">View track</string>
     <string name="tomayachek_site">MayachekSite</string>
 </resources>

@@ -20,6 +20,8 @@
 	    endif;
 	    die("Указаный файл не существует!");
 	endif;	
+    else:
+	if ($action==""){$action="home";};
     endif;
     
     if ($action!=""):

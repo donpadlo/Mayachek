@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by pavel on 28.06.17.
@@ -129,13 +131,19 @@ public class MayachekService extends Service {
     class UpdateCoors extends AsyncTask<String, Integer, String> {
         @Override
         protected String doInBackground(String... arg) {
-            String res;
+            String res,dt;
+
+            Date dateNow = new Date();
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            dt=formatForDateNow.format(dateNow).toString();
+
             BufferedReader reader = null;
             res=null;
             HttpURLConnection urlConnection = null;
             Log.i("Info", "--пробую отправлять координаты");
             try {
-                URL url = new URL("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
+                URL url = new URL("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&dt="+dt+"&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
+                Log.i("Info","http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&dt="+dt+"&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
 
