@@ -84,6 +84,9 @@ public class Form1 extends AppCompatActivity {
     public void ClickEnterNocButton(View view) {
         getApplicationContext().stopService(new Intent(getApplicationContext(), MayachekService.class));
         getApplicationContext().startService(new Intent(getApplicationContext(),MayachekService.class));
+        Toast toast = Toast.makeText(getApplicationContext(), "Сервис перезапущен!", Toast.LENGTH_SHORT);
+        toast.show();
+
     };
 
     @Override
