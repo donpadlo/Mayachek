@@ -134,8 +134,8 @@ public class MayachekService extends Service {
             String res,dt;
 
             Date dateNow = new Date();
-            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-ddhh:mm:ss");
-            dt=formatForDateNow.format(dateNow).toString().replace(" ","%20");
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            dt=formatForDateNow.format(dateNow).toString().replace(" ","v");
 
             BufferedReader reader = null;
             res=null;
