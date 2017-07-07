@@ -12,5 +12,7 @@
     <string name="error_connections">Ошибка соединения</string>
     <string name="view_on_browser">Открыть трек браузере</string>
     <string name="tomayachek_site">Перейти на сайт</string>
+    <string name="transactions">Не отправлено</string>
+    <string name="trcnt">0</string>
 
 </resources>

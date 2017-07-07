@@ -4,11 +4,15 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
@@ -37,6 +41,7 @@ import java.util.Date;
 
 public class MayachekService extends Service {
     String userid;
+    DBHelper dbHelper;
     public boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
@@ -51,6 +56,8 @@ public class MayachekService extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("Info", "--инициировали БД mayachek");
+        dbHelper = new DBHelper(this);
         Log.i("Info", "--я сервис,я стартовал");
         //оформляю подписку на изменение координат GPS
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -81,21 +88,68 @@ public class MayachekService extends Service {
     //подписка на обновление местоположения
     public LocationListener locationListener = new LocationListener() {
         public void UpdateMeLocation(Location location) {
+            SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            userid = mSettings.getString("userid", "");
+            String dt;
+
+            Date dateNow = new Date();
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            dt=formatForDateNow.format(dateNow).toString().replace(" ","v");
+
             if (isOnline() == true){
-                    SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                    userid = mSettings.getString("userid", "");
                     if (userid != "") {
                         if ((location.getProvider().equals(LocationManager.GPS_PROVIDER)) == true) {
                             Log.i("Info", "-service: изменилось местоположение по GPS");
-                            new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "GPS");
+                            new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "GPS",dt);
                         };
                         if (Build.VERSION.SDK_INT > 16) {
                             if ((location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) == true) {
                                 Log.i("Info", "-service: изменилось местоположение по Network");
-                                new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "Network");
+                                new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "Network",dt);
                             };
                         };
+                        // проверяем, если есть не отосланные транзакции, то отсылаем по немножку..
+                        SQLiteDatabase db = dbHelper.getWritableDatabase();
+                        Cursor cursor = db.rawQuery("select * from coords limit 10", null);
+                        String type;
+                        if (cursor.moveToFirst()) {
+                            do {
+                                type=cursor.getString(4);
+                                dt=cursor.getString(1);
+                                UpdateCoors mc = new UpdateCoors();
+                                mc.execute(cursor.getString(3), cursor.getString(2), type,dt);
+                                db.delete("coords", "id = " + cursor.getString(0), null);
+                            } while (cursor.moveToNext());
+                        };
+                        cursor.close();
+                        //и удаляем..
+                        //db.execSQL("delete * from coords limit 10");
+                        dbHelper.close();
+
                     };
+        } else {
+         //пишем в историяю не отосланых перемещений в БД
+                if (userid != "") {
+                    // подключаемся к БД
+                    SQLiteDatabase db = dbHelper.getWritableDatabase();
+                    ContentValues cv = new ContentValues();
+                    cv.put("dt",dt);
+                    cv.put("La",String.valueOf(location.getLatitude()));
+                    cv.put("Lo",String.valueOf(location.getLongitude()));
+                    if ((location.getProvider().equals(LocationManager.GPS_PROVIDER)) == true) {
+                        cv.put("type","GPS");
+                        long rowID = db.insert("coords", null, cv);
+                        Log.i("Info", "row inserted GPS, ID = " + rowID);
+                    };
+                    if (Build.VERSION.SDK_INT > 16) {
+                        if ((location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) == true) {
+                            cv.put("type","Network");
+                            long rowID = db.insert("coords", null, cv);
+                            Log.i("Info", "row inserted Network, ID = " + rowID);
+                        };
+                    };
+                    dbHelper.close();
+                };
         };
         //поспим немножко для экономии энергии
             try {
@@ -133,9 +187,7 @@ public class MayachekService extends Service {
         protected String doInBackground(String... arg) {
             String res,dt;
 
-            Date dateNow = new Date();
-            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            dt=formatForDateNow.format(dateNow).toString().replace(" ","v");
+            dt=arg[3];
 
             BufferedReader reader = null;
             res=null;
@@ -196,5 +248,23 @@ public class MayachekService extends Service {
         nm.notify(NOTIFY_ID, n);
 
     };
+    class DBHelper extends SQLiteOpenHelper {
+
+        public DBHelper(Context context) {
+            // конструктор суперкласса
+            super(context, "mayachekcoords", null, 1);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            Log.i("Info", "--БД нет, создаем новую!");
+            // создаем таблицу с полями
+            db.execSQL("create table coords (id integer primary key autoincrement,dt text,Lo text,La text,type text);");
+        }
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        }
+    }
 }
 

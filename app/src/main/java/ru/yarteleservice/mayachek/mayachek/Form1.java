@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -35,6 +38,7 @@ import java.net.URL;
 
 public class Form1 extends AppCompatActivity {
     String userid;
+    DBHelper dbHelper;
     private WebView mbrowser;
 
     public boolean isOnline() {
@@ -56,6 +60,16 @@ public class Form1 extends AppCompatActivity {
                 TextView coornet = (TextView) findViewById(R.id.textView6);
                 coornet.setText(String.valueOf(location.getLatitude())+"\r\n"+String.valueOf(location.getLongitude()));
             };
+            // ну и обновляю счтчик не отправленых транзаций
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Cursor cursor = db.rawQuery("select count(*) as cnt from coords", null);
+            if (cursor.moveToFirst()) {
+                do {
+                    TextView vtr = (TextView) findViewById(R.id.textView3);
+                    vtr.setText(cursor.getString(0));
+                } while (cursor.moveToNext());
+            }
+            dbHelper.close();
         }
 
         @Override
@@ -89,11 +103,13 @@ public class Form1 extends AppCompatActivity {
 
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form1);
-
+        //инициируем работу с БД
+        dbHelper = new DBHelper(this);
         // спрашиваем про права на доступ к координатам
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -253,6 +269,25 @@ public class Form1 extends AppCompatActivity {
             };
 
         };
+    }
+
+    class DBHelper extends SQLiteOpenHelper {
+
+        public DBHelper(Context context) {
+            // конструктор суперкласса
+            super(context, "mayachekcoords", null, 1);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            Log.i("Info", "--БД нет, создаем новую!");
+            // создаем таблицу с полями
+            db.execSQL("create table coords (id integer primary key autoincrement,dt text,Lo text,La text,type text);");
+        }
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        }
     }
 
 }
