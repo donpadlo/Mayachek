@@ -93,7 +93,7 @@ public class MayachekService extends Service {
             String dt;
 
             Date dateNow = new Date();
-            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             dt=formatForDateNow.format(dateNow).toString().replace(" ","v");
 
             if (isOnline() == true){
