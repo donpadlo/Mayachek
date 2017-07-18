@@ -56,8 +56,6 @@ public class MayachekService extends Service {
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("Info", "--инициировали БД mayachek");
-        dbHelper = new DBHelper(this);
         Log.i("Info", "--я сервис,я стартовал");
         //оформляю подписку на изменение координат GPS
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -108,6 +106,8 @@ public class MayachekService extends Service {
                                 new UpdateCoors().execute(String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), "Network",dt);
                             };
                         };
+                        Log.i("Info", "--инициировали БД mayachek");
+                        dbHelper = new DBHelper(getApplicationContext());
                         // проверяем, если есть не отосланные транзакции, то отсылаем по немножку..
                         SQLiteDatabase db = dbHelper.getWritableDatabase();
                         Cursor cursor = db.rawQuery("select * from coords limit 10", null);
@@ -125,11 +125,13 @@ public class MayachekService extends Service {
                         //и удаляем..
                         //db.execSQL("delete * from coords limit 10");
                         dbHelper.close();
-
+                        dbHelper=null;
                     };
         } else {
          //пишем в историяю не отосланых перемещений в БД
                 if (userid != "") {
+                    Log.i("Info", "--инициировали БД mayachek");
+                    dbHelper = new DBHelper(getApplicationContext());
                     // подключаемся к БД
                     SQLiteDatabase db = dbHelper.getWritableDatabase();
                     ContentValues cv = new ContentValues();
@@ -149,6 +151,7 @@ public class MayachekService extends Service {
                         };
                     };
                     dbHelper.close();
+                    dbHelper=null;
                 };
         };
         //поспим немножко для экономии энергии
@@ -224,6 +227,17 @@ public class MayachekService extends Service {
     public void SendNotif(CharSequence title,CharSequence mess,int NOTIFY_ID) {
         Context context = getApplicationContext(); //инициатор - текущая активность
 
+
+        Notification.Builder builder = new Notification.Builder(this).setSmallIcon(R.mipmap.ic_launcher);
+        Notification notification;
+        if (Build.VERSION.SDK_INT < 16)
+            notification = builder.getNotification();
+        else
+            notification = builder.build();
+        startForeground(NOTIFY_ID, notification);
+
+    /*
+
         Intent notificationIntent = new Intent(context, Form1.class);
         notificationIntent.setFlags(notificationIntent.FLAG_ACTIVITY_CLEAR_TOP | notificationIntent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
@@ -245,7 +259,7 @@ public class MayachekService extends Service {
 
         Notification n = builder.getNotification();
         n.flags|= Notification.FLAG_NO_CLEAR;
-        nm.notify(NOTIFY_ID, n);
+        nm.notify(NOTIFY_ID, n);*/
 
     };
     class DBHelper extends SQLiteOpenHelper {

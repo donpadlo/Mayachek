@@ -48,8 +48,6 @@ public class Form1 extends AppCompatActivity {
     //подписка на обновление местоположения
     public LocationListener locationListener = new LocationListener() {
         public void UpdateMeLocation(Location location){
-            SharedPreferences mSettings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor mEdit = mSettings.edit();
             if ((location.getProvider().equals(LocationManager.GPS_PROVIDER))==true){
                 Log.i("Info", "-изменилось местоположение по GPS");
                 TextView coorgps = (TextView) findViewById(R.id.textView7);
@@ -61,6 +59,8 @@ public class Form1 extends AppCompatActivity {
                 coornet.setText(String.valueOf(location.getLatitude())+"\r\n"+String.valueOf(location.getLongitude()));
             };
             // ну и обновляю счтчик не отправленых транзаций
+            //инициируем работу с БД
+            dbHelper = new DBHelper(getApplicationContext());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             Cursor cursor = db.rawQuery("select count(*) as cnt from coords", null);
             if (cursor.moveToFirst()) {
@@ -70,6 +70,7 @@ public class Form1 extends AppCompatActivity {
                 } while (cursor.moveToNext());
             }
             dbHelper.close();
+            dbHelper=null; //освобождаю переменную
         }
 
         @Override
@@ -108,8 +109,6 @@ public class Form1 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form1);
-        //инициируем работу с БД
-        dbHelper = new DBHelper(this);
         // спрашиваем про права на доступ к координатам
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -173,7 +172,7 @@ public class Form1 extends AppCompatActivity {
                 break;
             case R.id.view_in_browser:
                 if (userid!="") {
-                    Uri address = Uri.parse("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?action=viewmeonline&userid=" + userid);
+                    Uri address = Uri.parse("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?action=viewtrack&userid=" + userid);
                     Intent openlink = new Intent(Intent.ACTION_VIEW, address);
                     startActivity(openlink);
                 } else {
