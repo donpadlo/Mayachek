@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Маячёк</string>
+    <string name="app_name">Маячок</string>
     <string name="you_id_real">Пока нет</string>
     <string name="you_id">Ваш ID</string>
     <string name="view_in_map">Текущее положение</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mayachek</string>
+    <string name="app_name">Mayachok</string>
     <string name="coorGPS">0;0</string>
     <string name="coornet">0;0</string>
     <string name="get_new_id">Get new Id</string>

@@ -7,8 +7,8 @@ android {
         applicationId "ru.yarteleservice.mayachek.mayachek"
         minSdkVersion 19
         targetSdkVersion 19
-        versionCode 8
-        versionName '1.8'
+        versionCode 9
+        versionName '1.9'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

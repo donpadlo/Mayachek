@@ -156,8 +156,8 @@ public class MayachekService extends Service {
         };
         //поспим немножко для экономии энергии
             try {
-                Log.i("Info", "-service: пошел поспать 15 секундочек");
-                Thread.sleep(15000);
+                Log.i("Info", "-service: пошел поспать 25 секундочек");
+                Thread.sleep(25000);
             } catch (InterruptedException e) {
             }
         //
@@ -197,8 +197,8 @@ public class MayachekService extends Service {
             HttpURLConnection urlConnection = null;
             Log.i("Info", "--пробую отправлять координаты");
             try {
-                URL url = new URL("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&dt="+dt+"&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
-                Log.i("Info","http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&dt="+dt+"&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
+                URL url = new URL("http://xn--80auej8b7b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&dt="+dt+"&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
+                Log.i("Info","http://xn--80auej8b7b.xn--90acbu5aj5f.xn--p1ai/index.php?route=updatecoors&dt="+dt+"&userid="+userid+"&Longitude="+arg[0]+"&Latitude="+arg[1]+"&type="+arg[2]);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
 

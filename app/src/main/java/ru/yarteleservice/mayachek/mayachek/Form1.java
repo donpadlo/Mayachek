@@ -166,13 +166,13 @@ public class Form1 extends AppCompatActivity {
                 };
             break;
             case R.id.mayachek_site:
-                    Uri address2 = Uri.parse("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai");
+                    Uri address2 = Uri.parse("http://xn--80auej8b7b.xn--90acbu5aj5f.xn--p1ai");
                     Intent openlink2 = new Intent(Intent.ACTION_VIEW, address2);
                     startActivity(openlink2);
                 break;
             case R.id.view_in_browser:
                 if (userid!="") {
-                    Uri address = Uri.parse("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?action=viewtrack&userid=" + userid);
+                    Uri address = Uri.parse("http://xn--80auej8b7b.xn--90acbu5aj5f.xn--p1ai/index.php?action=viewtrack&userid=" + userid);
                     Intent openlink = new Intent(Intent.ACTION_VIEW, address);
                     startActivity(openlink);
                 } else {
@@ -189,7 +189,7 @@ public class Form1 extends AppCompatActivity {
                         mbrowser.getSettings().setJavaScriptEnabled(true);
                         CookieManager.getInstance().setAcceptCookie(true);
                         mbrowser.loadData("Нет подключения к интернет!", "text/html; charset=UTF-8", null);
-                        mbrowser.loadUrl("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?action=viewmeonline&userid=" + userid);
+                        mbrowser.loadUrl("http://xn--80auej8b7b.xn--90acbu5aj5f.xn--p1ai/index.php?action=viewmeonline&userid=" + userid);
                         mbrowser.setWebViewClient(new MayachekWebViewClient());
                     } else {
                         Toast toast = Toast.makeText(getApplicationContext(), "Нет идентификатора!", Toast.LENGTH_SHORT);
@@ -224,7 +224,7 @@ public class Form1 extends AppCompatActivity {
             HttpURLConnection urlConnection = null;
             Log.i("Info", "Запустил http соединение для получения нового ID");
             try {
-                URL url = new URL("http://xn--80akpf0d5b.xn--90acbu5aj5f.xn--p1ai/index.php?route=getnewid");
+                URL url = new URL("http://xn--80auej8b7b.xn--90acbu5aj5f.xn--p1ai/index.php?route=getnewid");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
